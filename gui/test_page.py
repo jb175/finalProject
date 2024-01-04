@@ -1,4 +1,5 @@
 import requests
+import os
 from tkinter import Frame, Label, Entry, Button, Text, Scrollbar, StringVar
 
 class TestPage(Frame):
@@ -33,12 +34,26 @@ class TestPage(Frame):
         email_field = self.email_field_entry.get()
         password_field = self.password_field_entry.get()
 
-        # List of common passwords to test
-        passwords = ["password", "1234", "admin", "admin123"]
+        # Get the directory of this script
+        dir_path = os.path.dirname(os.path.realpath(__file__))
 
-        # List of common usernames to test if no username is provided
-        usernames = ["admin", "user", "test", "username"] if not username else [username]
+        # Construct the file path
+        password_file_path = os.path.join(dir_path, '../ressources/password.txt')
+        usernames_file_path = os.path.join(dir_path, '../ressources/usernames.txt')
 
+
+        # Read the list of common passwords from a file
+        with open(password_file_path, 'r') as f:
+            passwords = [line.strip() for line in f]
+
+        # Read the list of common usernames from a file
+        usernames = []
+        if not username:
+            with open(usernames_file_path, 'r') as f:
+                usernames = [line.strip() for line in f]
+        else:
+            usernames = [username]
+        
         # Clear the result text
         self.result_text.delete('1.0', 'end')
 
