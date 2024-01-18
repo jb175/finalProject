@@ -33,8 +33,8 @@ class DomXssPage(Frame):
         dir_path = os.path.dirname(os.path.realpath(__file__))
 
         # Construct the file path
-        queryParameter_file_path = os.path.join(dir_path, '../ressources/queryParameter.txt')
-        url_file_path = os.path.join(dir_path, '../ressources/url.txt')
+        queryParameter_file_path = os.path.join(dir_path, '../Resources/DomXss/queryParameter.txt')
+        url_file_path = os.path.join(dir_path, '../Resources/DomXss/url.txt')
 
         # Read the list of query Param from a file
         queryParameters = []
