@@ -1,35 +1,42 @@
 from tkinter import Tk, Menu
-from gui.main_page import MainPage
-from gui.test_page import TestPage
-from gui.dom_xss_page import DomXssPage
+from GUI.welcome import Welcome
+from GUI.bruteforce import Bruteforce
+from GUI.sql_injection import SQLInjection
+from GUI.dom_xss_page import DomXssPage
 
 class Application(Tk):
     def __init__(self):
         Tk.__init__(self)
         self.frames = {}
 
-        for F in (MainPage, TestPage, DomXssPage):
+        for F in (Welcome, Bruteforce, SQLInjection, DomXssPage):
             page_name = F.__name__
             frame = F(parent=self, controller=self)
             self.frames[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.show_frame("MainPage")
+        self.show_frame("Welcome")
 
-        # Create a menu
         menubar = Menu(self)
         filemenu = Menu(menubar, tearoff=0)
-        filemenu.add_command(label="Main Page", command=lambda: self.show_frame("MainPage"))
-        filemenu.add_command(label="Test Page", command=lambda: self.show_frame("TestPage"))
+
+        filemenu.add_command(label="Welcome", command=lambda: self.show_frame("Welcome"))
+        filemenu.add_command(label="Bruteforce", command=lambda: self.show_frame("Bruteforce"))
+        filemenu.add_command(label="SQL Injection", command=lambda: self.show_frame("SQLInjection"))
         filemenu.add_command(label="Dom XSS Page", command=lambda: self.show_frame("DomXssPage"))
+        filemenu.add_command(label="Reflected XSS", command=lambda: self.show_frame(""))
+        filemenu.add_command(label="XEE", command=lambda: self.show_frame(""))
+        filemenu.add_command(label="SSRF", command=lambda: self.show_frame(""))
+
         menubar.add_cascade(label="Navigate", menu=filemenu)
 
-        # Display the menu
         self.config(menu=menubar)
 
     def show_frame(self, page_name):
         frame = self.frames[page_name]
         frame.tkraise()
 
-app = Application()
-app.mainloop()
+
+if __name__ == "__main__":
+    app = Application()
+    app.mainloop()
