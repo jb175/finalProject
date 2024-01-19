@@ -12,8 +12,7 @@ import time
 EDGE = 1
 CHROME = 2
 
-navigator = EDGE
-timeOpenBrowser = 4
+navigator = CHROME
 timeBetweenRequest = 1
 
 
@@ -64,7 +63,6 @@ class DOMXSS(Frame):
         fail_count = 0
         
         driver = self.launchNavigator()
-        time.sleep(timeOpenBrowser)
         
         for sub_url in urls:
             for queryParameter in queryParameters:
