@@ -3,8 +3,9 @@ from tkinter import Frame, Label, Entry, Button, Text
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.firefox.options import Options
+
 import threading
 import time
 
@@ -16,19 +17,20 @@ timeOpenBrowser = 4
 timeBetweenRequest = 1
 
 
-class DomXssPage(Frame):
+class DOMXSS(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
         self.controller = controller
 
-        Label(self, text="Login URL:").pack()
+        Label(self, text="URL:").pack()
         self.url_entry = Entry(self)
         self.url_entry.pack()
+        self.url_entry.insert("insert", "http://localhost:3000")
 
         self.result_text = Text(self)
         self.result_text.pack()
 
-        Button(self, text="Launch Attack", command=self.launch_attack).pack()
+        Button(self, text="Launch the attack", command=self.launch_attack).pack()
 
     def launch_attack(self):
         thread = threading.Thread(target=lambda: self.attack())
@@ -36,14 +38,13 @@ class DomXssPage(Frame):
     
 
     def attack(self):
-        base_url = self.url_entry.get()
 
         # Get the directory of this script
         dir_path = os.path.dirname(os.path.realpath(__file__))
 
         # Construct the file path
-        queryParameter_file_path = os.path.join(dir_path, '../Resources/DomXss/queryParameter.txt')
-        url_file_path = os.path.join(dir_path, '../Resources/DomXss/url.txt')
+        queryParameter_file_path = os.path.join(dir_path, '../Resources/DOM XSS/queryParameter.txt')
+        url_file_path = os.path.join(dir_path, '../Resources/DOM XSS/url.txt')
 
         # Read the list of query Param from a file
         queryParameters = []
@@ -51,7 +52,6 @@ class DomXssPage(Frame):
             queryParameters = [line.strip() for line in f]
 
         # Read the list of common url from a file
-        urls = []
         with open(url_file_path, 'r') as f:
             urls = [line.strip() for line in f]
 
@@ -68,8 +68,7 @@ class DomXssPage(Frame):
         
         for sub_url in urls:
             for queryParameter in queryParameters:
-
-                driver.get(base_url + sub_url + queryParameter + javascript_executed)
+                driver.get(self.url_entry.get() + sub_url + queryParameter + javascript_executed)
 
                 try:
                     # Wait for the alert to be present
