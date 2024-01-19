@@ -1,0 +1,15 @@
+/ 
+/search
+/product
+/products
+/blog
+/blog/search
+/events/search
+/archive
+/category
+/categories
+/form
+/forms
+/advanced-search
+/stats
+/jobs
