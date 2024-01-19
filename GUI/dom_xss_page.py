@@ -6,6 +6,15 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.firefox.options import Options
 import threading
+import time
+
+EDGE = 1
+CHROME = 2
+
+navigator = EDGE
+timeOpenBrowser = 4
+timeBetweenRequest = 1
+
 
 class DomXssPage(Frame):
     def __init__(self, parent, controller):
@@ -53,21 +62,18 @@ class DomXssPage(Frame):
 
         success_count = 0
         fail_count = 0
-
+        
+        driver = self.launchNavigator()
+        time.sleep(timeOpenBrowser)
+        
         for sub_url in urls:
             for queryParameter in queryParameters:
-                # Créer une instance des options Chrome
-                chrome_options = Options()
-                chrome_options.add_argument('--headless')
-
-                # Créer une instance du navigateur Chrome avec les options headless
-                driver = webdriver.Chrome(options=chrome_options)
 
                 driver.get(base_url + sub_url + queryParameter + javascript_executed)
 
                 try:
                     # Wait for the alert to be present
-                    WebDriverWait(driver, 10).until(EC.alert_is_present())
+                    WebDriverWait(driver, timeBetweenRequest).until(EC.alert_is_present())
 
                     # Switch to the alert
                     alert = driver.switch_to.alert
@@ -86,7 +92,18 @@ class DomXssPage(Frame):
                     self.result_text.insert('end', f"No alert present with sub URL: {sub_url} and query parameters: {queryParameter}\n")
                     fail_count += 1
 
-                driver.close()
+        # Close the browser after all URLs have been processed
+        driver.quit()
             
         # Display the summary
         self.result_text.insert('end', f"\nSummary:\nSuccesses: {success_count}\nFailures: {fail_count}\n")
+    
+    def launchNavigator(self):
+        navigator_options = Options()
+        navigator_options.add_argument('--headless')
+        if navigator == EDGE:
+            return webdriver.Edge(options=navigator_options)
+        elif navigator == CHROME:
+            return webdriver.Chrome(options=navigator_options)
+        else:
+            return webdriver.Chrome(options=navigator_options)
