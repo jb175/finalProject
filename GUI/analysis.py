@@ -71,8 +71,8 @@ class Analysis(Frame):
         alerts_counter = self.cross_domain_javascript_file_inclusion_check(html, alerts_counter)
         alerts_counter = self.cookie_no_http_only_flag_check(headers, alerts_counter)
         alerts_counter = self.cookie_with_same_site_attribute_none_check(headers, alerts_counter)
-        alerts_counter = self.x_content_type_options_header_missing(headers, alerts_counter)
-        alerts_counter = self.strict_transport_security_header_not_set(headers, alerts_counter)
+        alerts_counter = self.x_content_type_options_header_missing_check(headers, alerts_counter)
+        alerts_counter = self.strict_transport_security_header_not_set_check(headers, alerts_counter)
         return alerts_counter
 
     def csp_header_not_set_check(self, headers, alerts_counter):
@@ -154,13 +154,13 @@ class Analysis(Frame):
             alerts_counter[2] += 1
         return alerts_counter
 
-    def x_content_type_options_header_missing(self, headers, alerts_counter):
+    def x_content_type_options_header_missing_check(self, headers, alerts_counter):
         if "X-Content-Type-Options" not in headers:
             self.result_text.insert('end', "[Low] X-ContentType-Options header missing\n")
             alerts_counter[2] += 1
         return alerts_counter
 
-    def strict_transport_security_header_not_set(self, headers, alerts_counter):
+    def strict_transport_security_header_not_set_check(self, headers, alerts_counter):
         if "Strict-Transport-Security" not in headers:
             self.result_text.insert('end', "[Low] Strict-Transport-Security header not set\n")
             alerts_counter[2] += 1
