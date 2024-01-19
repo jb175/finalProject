@@ -2,6 +2,7 @@ from tkinter import Frame, Label, Entry, Button, Text
 
 import os
 import requests
+import threading
 
 
 class Bruteforce(Frame):
@@ -32,6 +33,10 @@ class Bruteforce(Frame):
         Button(self, text="Launch the attack", command=self.launch_attack).pack()
 
     def launch_attack(self):
+        thread = threading.Thread(target=lambda: self.attack())
+        thread.start()
+
+    def attack(self):
 
         self.result_text.delete('1.0', 'end')
 
