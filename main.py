@@ -3,14 +3,15 @@ from GUI.analysis import Analysis
 from GUI.scanning import Scanning
 from GUI.bruteforce import Bruteforce
 from GUI.sql_injection import SQLInjection
-from GUI.dom_xss_page import DomXssPage
+from GUI.dom_xss_page import DOMXSS
+
 
 class Application(Tk):
     def __init__(self):
         Tk.__init__(self)
         self.frames = {}
 
-        for F in (Analysis, Scanning, Bruteforce, SQLInjection, DomXssPage):
+        for F in (Analysis, Scanning, Bruteforce, SQLInjection, DOMXSS):
             page_name = F.__name__
             frame = F(parent=self, controller=self)
             self.frames[page_name] = frame
@@ -26,7 +27,7 @@ class Application(Tk):
         filemenu.add_command(label="Scanning", command=lambda: self.show_frame("Scanning"))
         filemenu.add_command(label="Bruteforce", command=lambda: self.show_frame("Bruteforce"))
         filemenu.add_command(label="SQL Injection", command=lambda: self.show_frame("SQLInjection"))
-        filemenu.add_command(label="Dom XSS Page", command=lambda: self.show_frame("DomXssPage"))
+        filemenu.add_command(label="DOM XSS", command=lambda: self.show_frame("DOMXSS"))
 
         menubar.add_cascade(label="Navigate", menu=filemenu)
 
